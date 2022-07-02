@@ -1,7 +1,6 @@
 <script>
   import { signout, getUser } from "$lib/services";
   const currentUser = getUser();
-  console.log(currentUser);
 
   const handleSignout = () => {
     signout();

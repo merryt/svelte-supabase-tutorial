@@ -9,6 +9,7 @@
   const newPost = () => {
     const user = getUser();
     createPost({ content, user: user.email });
+    content = "";
   };
 </script>
 

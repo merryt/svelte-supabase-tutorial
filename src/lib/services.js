@@ -40,7 +40,21 @@ export async function createComment({ post, user, content }) {
 }
 
 export async function getAllPosts() {
-    const { data, error } = await supabase.from('posts').select()
+    let { data, error } = await supabase.from('posts').select().order('created_at', { ascending: false }).limit(3)
+    if (error) return { data, error }
+
+    data = await Promise.all(data.map(async (post) => {
+        const [{ count: likes }, { data: comments, error }, /*{publicURL}*/] = await Promise.all([
+            await supabase.from('likes')
+                .select('id', { count: 'estimated', head: true })
+                .eq('post', post.id),
+            await supabase
+                .from('comments')
+                .select()
+                .eq('post', post.id)
+        ])
+        return { ...post, likes, comments }
+    }))
     return { data, error }
 }
 

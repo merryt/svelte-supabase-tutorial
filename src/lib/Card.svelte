@@ -2,6 +2,8 @@
   export let card;
   let likes = 0,
     comments = [];
+
+  console.log(card);
 </script>
 
 {#if card}
@@ -12,8 +14,8 @@
       <div class="card-actions justify-between mt-10 items-center">
         <small>{card.user}</small>
         <div>
-          <button class="btn">like</button>
-          <button class="btn">comment</button>
+          <button class="btn">Like ({card.likes})</button>
+          <button class="btn">comment({card.comments.length})</button>
         </div>
       </div>
     </div>
