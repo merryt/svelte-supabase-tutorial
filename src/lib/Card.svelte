@@ -2,8 +2,6 @@
   export let card;
   let likes = 0,
     comments = [];
-
-  console.log(card);
 </script>
 
 {#if card}

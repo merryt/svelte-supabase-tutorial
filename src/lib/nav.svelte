@@ -1,6 +1,6 @@
 <script>
-  import { signout, getUser } from "$lib/services";
-  const currentUser = getUser();
+  import { signout } from "$lib/services";
+  import { user } from "$lib/stores";
 
   const handleSignout = () => {
     signout();
@@ -13,18 +13,14 @@
   </div>
   <div class="flex-none">
     <ul class="menu menu-horizontal p-0">
-      {#await currentUser}
+      {#if $user != null}
+        <li><a href="/">{$user.email}</a></li>
+        <li>
+          <button on:click|preventDefault="{handleSignout}">Logout</button>
+        </li>
+      {:else}
         <li><a href="/login">Login</a></li>
-      {:then user}
-        {#if user}
-          <li><a href="/">{user.email}</a></li>
-          <li>
-            <button on:click|preventDefault="{handleSignout}">Logout</button>
-          </li>
-        {:else}
-          <li><a href="/login">Login</a></li>
-        {/if}
-      {/await}
+      {/if}
     </ul>
   </div>
 </div>
