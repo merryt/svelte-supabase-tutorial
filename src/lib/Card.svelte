@@ -1,14 +1,20 @@
 <script>
-  export let cardData;
+  export let card;
+  let likes = 0,
+    comments = [];
 </script>
 
-{#if cardData}
+{#if card}
   <div class="card w-full bg-base-100 shadow-xl my-4">
     <div class="card-body">
-      <a href="/posts/{cardData.id}" class="card-title">{cardData.content}</a>
+      <a href="/posts/{card.id}" class="card-title">{card.content}</a>
 
-      <div class="card-actions justify-end">
-        <span>{cardData.user}</span>
+      <div class="card-actions justify-between mt-10 items-center">
+        <small>{card.user}</small>
+        <div>
+          <button class="btn">like</button>
+          <button class="btn">comment</button>
+        </div>
       </div>
     </div>
   </div>

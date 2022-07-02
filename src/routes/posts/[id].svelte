@@ -12,7 +12,7 @@
   <progress class="progress w-56"></progress>
 {:then { data, error }}
   {#if data}
-    <Card cardData="{data[0]}" />
+    <Card card="{data[0]}" />
   {:else}
     <Error error="{error}" />
   {/if}

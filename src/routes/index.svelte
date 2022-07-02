@@ -14,7 +14,7 @@
 {#await posts then { data, error }}
   {#if data}
     {#each data as post}
-      <Card cardData="{post}" />
+      <Card card="{post}" />
     {/each}
   {:else}
     <Error error="{error}" />
