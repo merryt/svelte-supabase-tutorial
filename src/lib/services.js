@@ -18,4 +18,33 @@ export async function signout() {
 
 }
 
+export async function createPost({ content, user }) {
+    const { data, error } = await supabase
+        .from('posts')
+        .insert({ content, user })
+    return { data, error }
+}
 
+export async function createLike({ post, user }) {
+    const { data, error } = await supabase.from('likes').insert({
+        post, user
+    })
+    return { data, error }
+}
+
+export async function createComment({ post, user, content }) {
+    const { data, error } = await supabase.from('comment').insert({
+        post, user, content
+    })
+    return { data, error }
+}
+
+export async function getAllPosts() {
+    const { data, error } = await supabase.from('posts').select()
+    return { data, error }
+}
+
+export async function getPost(id) {
+    const { data, error } = await supabase.from('posts').select().eq("id", parseInt(id))
+    return { data, error }
+}
