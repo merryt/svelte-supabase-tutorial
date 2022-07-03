@@ -1,7 +1,13 @@
 <script>
+  import { createLike } from "$lib/services";
+  import { user } from "$lib/stores";
+
   export let card;
-  let likes = 0,
-    comments = [];
+  const handleLike = () => {
+    card.likes = card.likes + 1;
+    console.log({ post: card.id, user: $user.email });
+    createLike({ post: card.id, user: $user.email });
+  };
 </script>
 
 {#if card}
@@ -12,8 +18,9 @@
       <div class="card-actions justify-between mt-10 items-center">
         <small>{card.user}</small>
         <div>
-          <button class="btn">Like ({card.likes})</button>
-          <button class="btn">comment({card.comments.length})</button>
+          <button class="btn" on:click|preventDefault="{handleLike}"
+            >Like ({card.likes})</button
+          >
         </div>
       </div>
     </div>
