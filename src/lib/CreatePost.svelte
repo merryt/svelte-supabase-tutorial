@@ -2,14 +2,19 @@
   import { createPost, getUser } from "$lib/services";
   import Error from "$lib/error.svelte";
   import Success from "$lib/success.svelte";
+
+  import { createEventDispatcher } from "svelte";
+  const dispatch = createEventDispatcher();
+
   let content = "";
 
   let createPostPromise = Promise.resolve({});
 
-  const newPost = () => {
+  const newPost = async () => {
     const user = getUser();
-    createPost({ content, user: user.email });
+    const newpost = createPost({ content, user: user.email });
     content = "";
+    dispatch("newPost", await newpost);
   };
 </script>
 
