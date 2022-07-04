@@ -3,6 +3,8 @@
   import { user } from "$lib/stores";
 
   export let card;
+
+  console.log(card);
   const handleLike = () => {
     card.likes = card.likes + 1;
     console.log({ post: card.id, user: $user.email });
@@ -12,6 +14,7 @@
 
 {#if card}
   <div class="card w-full bg-base-100 shadow-xl my-4">
+    <figure><img src="{card.publicURL}" alt="Shoes" /></figure>
     <div class="card-body">
       <a href="/posts/{card.id}" class="card-title">{card.content}</a>
 

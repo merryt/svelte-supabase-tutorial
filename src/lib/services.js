@@ -18,11 +18,28 @@ export async function signout() {
 
 }
 
-export async function createPost({ content, user }) {
-    const { data, error } = await supabase
-        .from('posts')
-        .insert({ content, user })
-    return { data, error }
+export async function createPost({ content, user, imageFile }) {
+    if (imageFile) {
+        const { data: imageData, error: imageError } = await supabase
+            .storage
+            .from('images')
+            .upload(getUser().email + '/' + Date.now(), imageFile, {
+                cacheControl: '3600',
+                upsert: false
+            })
+
+        if (imageError) return { data: null, error: imageError }
+
+        const { data, error } = await supabase.from('posts').insert({
+            content, user, image: imageData.Key
+        })
+        return { data, error }
+    } else {
+        const { data, error } = await supabase
+            .from('posts')
+            .insert({ content, user })
+        return { data, error }
+    }
 }
 
 export async function createLike({ post, user }) {
@@ -42,16 +59,18 @@ export async function createComment({ post, user, content }) {
 
 const getLikesAndComments = async (data) => {
     const updatedData = await Promise.all(data.map(async (post) => {
-        const [{ count: likes }, { data: comments, error }, /*{publicURL}*/] = await Promise.all([
+        const [{ count: likes }, { data: comments, error }, { publicURL }] = await Promise.all([
             await supabase.from('likes')
                 .select('id', { count: 'estimated', head: true })
                 .eq('post', post.id),
             await supabase
                 .from('comments')
                 .select()
-                .eq('post', post.id)
+                .eq('post', post.id),
+            post.image ? await supabase.storage.from('images').getPublicUrl(post.image.split('/').slice(1).join('/')) : Promise.resolve({})
+
         ])
-        return { ...post, likes, comments }
+        return { ...post, likes, comments, publicURL }
     }))
     return await updatedData
 }

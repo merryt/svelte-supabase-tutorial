@@ -2,17 +2,19 @@
   import { createPost, getUser } from "$lib/services";
   import Error from "$lib/error.svelte";
   import Success from "$lib/success.svelte";
+  import UploadImage from "$lib/UploadImage.svelte";
 
   import { createEventDispatcher } from "svelte";
   const dispatch = createEventDispatcher();
 
   let content = "";
+  let file = null;
 
   let createPostPromise = Promise.resolve({});
 
   const newPost = async () => {
     const user = getUser();
-    const newpost = createPost({ content, user: user.email });
+    const newpost = createPost({ content, user: user.email, imageFile: file });
     content = "";
     dispatch("newPost", await newpost);
   };
@@ -25,6 +27,7 @@
       class="textarea textarea-primary mb-4"
       placeholder="Put some text here"
       bind:value="{content}"></textarea>
+    <UploadImage bind:file />
     {#await createPostPromise}
       <button class="btn btn-disabled text-xl">Submit</button>
     {:then { data, error }}
