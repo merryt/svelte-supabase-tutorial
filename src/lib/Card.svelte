@@ -14,7 +14,9 @@
 
 {#if card}
   <div class="card w-full bg-base-100 shadow-xl my-4">
-    <figure><img src="{card.publicURL}" alt="Shoes" /></figure>
+    {#if card.publicURL}
+      <figure><img src="{card.publicURL}" alt="{card.content}" /></figure>
+    {/if}
     <div class="card-body">
       <a href="/posts/{card.id}" class="card-title">{card.content}</a>
 
